@@ -1,3 +1,4 @@
+import ru.gr0550x.EvenNumbers;
 import ru.gr0550x.OddNumbers;
 
 void main() {
@@ -8,6 +9,11 @@ void main() {
     }
     System.out.println();
     for (var num: odds){
+        System.out.print(num + " ");
+    }
+    var evens = new EvenNumbers(10);
+    System.out.println();
+    for (var num: evens){
         System.out.print(num + " ");
     }
 }
