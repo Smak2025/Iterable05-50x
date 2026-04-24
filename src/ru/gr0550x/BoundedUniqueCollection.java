@@ -1,5 +1,6 @@
 package ru.gr0550x;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -52,46 +53,79 @@ public class BoundedUniqueCollection<E> implements Collection<E> {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return Arrays.copyOf(elements, size);
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        //return Arrays.copyOf((T[])elements, size);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean add(E e) {
-        return false;
+        if (e == null) throw new NullPointerException("Нулевые элементы в коллекции не допускаются");
+        if (contains(e)) return false;
+        if (size == elements.length)
+            throw new IllegalStateException("Коллекция заполнена");
+        elements[size++] = e;
+        return true;
     }
 
     @Override
     public boolean remove(Object o) {
+        for (int i = 0; i < size; i++) {
+            if (elements[i].equals(o)){
+                System.arraycopy(elements, i + 1, elements, i, size - i - 1);
+                elements[--size] = null;
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        for (var otherElem: c){
+            if (!contains(otherElem)) return false;
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        boolean changed = false;
+        for (E otherElem: c){
+            if (add(otherElem)) changed = true;
+        }
+        return changed;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        var changed = false;
+        for (Object otherElem: c){
+            if (remove(otherElem)) changed = true;
+        }
+        return changed;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        var changed = false;
+        int i = 0;
+        while (i < size){
+            if (!c.contains(elements[i])) {
+                remove(elements[i]);
+                changed = true;
+            } else i++;
+        }
+        return changed;
     }
 
     @Override
     public void clear() {
-
+        Arrays.fill(elements, null);
+        size = 0;
     }
 }
