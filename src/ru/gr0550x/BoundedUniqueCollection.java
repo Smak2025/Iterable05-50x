@@ -26,8 +26,8 @@ public class BoundedUniqueCollection<E> implements Collection<E> {
 
     @Override
     public boolean contains(Object o) {
-        for (var elem: elements) {
-            if (elem.equals(o)) return true;
+        for (int i = 0; i < size; i++) {
+            if (elements[i].equals(o)) return true;
         }
         return false;
     }
